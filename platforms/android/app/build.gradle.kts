@@ -3,6 +3,11 @@ plugins {
     kotlin("android")
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 android {
     namespace = "com.mouse.clipsync"
     compileSdk = 34
