@@ -8,6 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 clip_core = { path = "../clip_core" }
+tokio = { version = "1.38", default-features = false, features = ["net", "io-util", "rt-multi-thread"] }
 
 [build-dependencies]
 cbindgen = "0.26"
