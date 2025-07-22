@@ -1,4 +1,4 @@
-package com.example.clipsync
+package com.mouse.clipsync
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
