@@ -38,7 +38,7 @@ def pair_device(addr: str) -> bool:
 
 def main() -> None:
     root = Tk()
-    root.title("ClipSync Pairing")
+    root.title("Clipboard Pairing")
 
     Label(root, text="Server address:").grid(row=0, column=0, padx=5, pady=5)
     addr_var = StringVar()

@@ -2,10 +2,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "ClipSyncMac",
+    name: "ClipboardMac",
     platforms: [.macOS(.v14)],
     products: [
-        .executable(name: "ClipSyncMac", targets: ["App"]),
+        .executable(name: "ClipboardMac", targets: ["App"]),
     ],
     dependencies: [],
     targets: [

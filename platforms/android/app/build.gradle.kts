@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.clipsync"
+    namespace = "com.mouse.clipsync"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.clipsync"
+        applicationId = "com.mouse.clipsync"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

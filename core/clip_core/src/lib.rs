@@ -1,4 +1,4 @@
-//! Core library for ClipSync
+//! Core library for Clipboard
 
 pub mod pairing;
 pub mod sync;

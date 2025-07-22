@@ -1,3 +1,3 @@
 import Foundation
 
-print("ClipSync mac placeholder")
+print("Clipboard mac placeholder")

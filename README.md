@@ -1,7 +1,7 @@
-# ClipSync
+# Clipboard
 
 
-ClipSync is an experimental project to synchronize clipboard contents across multiple devices. This monorepo contains the Rust core library alongside Android and macOS applications.
+Clipboard is an experimental project to synchronize clipboard contents across multiple devices. This monorepo contains the Rust core library alongside Android and macOS applications.
 
 ## Project Structure
 
