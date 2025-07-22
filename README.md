@@ -45,6 +45,18 @@ just build-all
 
 This repository currently contains placeholder implementations. Planned work includes secure device pairing, clipboard synchronization across devices, and improved user interfaces on each platform.
 
+## Generating C Bindings
+
+The `clip_core_bindings` crate produces a C header using
+[cbindgen](https://github.com/eqrion/cbindgen) during its build script. Run
+
+```bash
+cargo build -p clip_core_bindings
+```
+
+from the `core` directory. The resulting `bindings.h` file will appear inside
+`core/bindings` once the build completes.
+
 Generated on 2025-07-22
 
 This project is licensed under the MIT License. See the LICENSE file for details.
