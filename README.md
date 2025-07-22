@@ -41,6 +41,19 @@ You can also install [`just`](https://github.com/casey/just) and run:
 just build-all
 ```
 
+### Pairing GUI
+
+An experimental desktop GUI for initiating device pairing is located in
+`scripts/pair_gui.py`. Build the bindings crate so the dynamic library is
+available and then run the script:
+
+```bash
+cargo build -p clip_core_bindings
+python scripts/pair_gui.py
+```
+
+Enter the server address and click **Pair** to connect to a remote device.
+
 ## Future Goals
 
 This repository currently contains placeholder implementations. Planned work includes secure device pairing, clipboard synchronization across devices, and improved user interfaces on each platform.
