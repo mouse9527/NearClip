@@ -4,7 +4,8 @@ build-core:
     cargo build -p clip_core --manifest-path core/Cargo.toml
 
 build-android:
-    cd platforms/android && ./gradlew assembleDebug
+    cd platforms/android && \
+    if [ -x ./gradlew ]; then ./gradlew assembleDebug; else gradle assembleDebug; fi
 
 build-mac:
     cd platforms/mac && swift run

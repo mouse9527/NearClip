@@ -25,8 +25,14 @@ cargo build -p clip_core --manifest-path core/Cargo.toml
 
 ### Android app
 
+The Gradle wrapper script is not checked into version control. Run
+`gradle wrapper` inside `platforms/android` the first time or use the
+system `gradle` command directly.
+
 ```bash
-cd platforms/android && ./gradlew assembleDebug
+cd platforms/android
+gradle wrapper    # only needed if ./gradlew does not exist
+./gradlew assembleDebug
 ```
 
 ### macOS app
