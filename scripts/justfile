@@ -1,0 +1,15 @@
+default: build-all
+
+build-core:
+    cargo build -p clip_core --manifest-path core/Cargo.toml
+
+build-android:
+    cd platforms/android && ./gradlew assembleDebug
+
+build-mac:
+    cd platforms/mac && swift run
+
+build-all:
+    just build-core
+    just build-android
+    just build-mac
