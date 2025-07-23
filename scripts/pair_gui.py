@@ -13,11 +13,9 @@ def _load_library() -> ctypes.CDLL:
     if lib_name is None:
         raise RuntimeError(f"Unsupported platform: {os.sys.platform}")
 
-    # Look for the library inside core/bindings/target/debug by default
+    # Look for the library inside core/target/debug by default
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    candidate = os.path.join(
-        repo_root, 'core', 'bindings', 'target', 'debug', lib_name
-    )
+    candidate = os.path.join(repo_root, 'core', 'target', 'debug', lib_name)
     if not os.path.exists(candidate):
         raise FileNotFoundError(
             f"Could not find {lib_name}. Build the bindings crate first."
