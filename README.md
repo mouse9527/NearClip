@@ -37,8 +37,14 @@ gradle wrapper    # only needed if ./gradlew does not exist
 
 ### macOS app
 
+Build the Rust bindings first so the dynamic library is available. The Swift package links
+against `libclip_core_bindings` under `core/target/debug`. Run the following commands:
+
 ```bash
-cd platforms/mac && swift run
+# build the Rust dynamic library first
+cargo build -p clip_core_bindings --features ble
+# then compile the Swift package
+cd platforms/mac && DYLD_LIBRARY_PATH=../../core/target/debug swift run
 ```
 
 You can also install [`just`](https://github.com/casey/just) and run:
@@ -60,7 +66,7 @@ An experimental desktop GUI for initiating device pairing is located in
 available and then run the script:
 
 ```bash
-cargo build -p clip_core_bindings
+cargo build -p clip_core_bindings --features ble
 python scripts/pair_gui.py
 ```
 
@@ -76,7 +82,7 @@ The `clip_core_bindings` crate produces a C header using
 [cbindgen](https://github.com/eqrion/cbindgen) during its build script. Run
 
 ```bash
-cargo build -p clip_core_bindings
+cargo build -p clip_core_bindings --features ble
 ```
 
 from the `core` directory. The resulting `bindings.h` file will appear inside

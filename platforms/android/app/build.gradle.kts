@@ -48,4 +48,5 @@ dependencies {
 
     implementation("androidx.activity:activity-compose")
     implementation("androidx.compose.material3:material3")
+    implementation("net.java.dev.jna:jna:5.13.0")
 }
