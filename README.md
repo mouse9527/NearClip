@@ -41,7 +41,9 @@ Build the Rust bindings first so the dynamic library is available. The Swift pac
 against `libclip_core_bindings` under `core/target/debug`. Run the following commands:
 
 ```bash
+# build the Rust dynamic library first
 cargo build -p clip_core_bindings --features ble
+# then compile the Swift package
 cd platforms/mac && DYLD_LIBRARY_PATH=../../core/target/debug swift run
 ```
 
