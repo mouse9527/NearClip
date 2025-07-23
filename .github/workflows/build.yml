@@ -20,7 +20,7 @@ jobs:
       - name: Build Android app
         run: cd platforms/android && ./gradlew assembleDebug
       - name: Upload Android APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
@@ -34,7 +34,7 @@ jobs:
       - name: Build macOS app
         run: cd platforms/mac && swift build -c release
       - name: Upload macOS binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-binary
           path: platforms/mac/.build/release/ClipboardMac
