@@ -37,11 +37,12 @@ gradle wrapper    # only needed if ./gradlew does not exist
 
 ### macOS app
 
-Build the Rust bindings first so the dynamic library is available:
+Build the Rust bindings first so the dynamic library is available. The Swift package links
+against `libclip_core_bindings` under `core/target/debug`. Run the following commands:
 
 ```bash
 cargo build -p clip_core_bindings --features ble
-cd platforms/mac && swift run
+cd platforms/mac && DYLD_LIBRARY_PATH=../../core/target/debug swift run
 ```
 
 You can also install [`just`](https://github.com/casey/just) and run:

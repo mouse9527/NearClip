@@ -18,7 +18,10 @@ let package = Package(
                 // The bindings are built using `cargo build -p clip_core_bindings --features ble`.
                 // Cargo places artifacts in `core/target`, so point the linker there.
                 let libPath = root.appendingPathComponent("../../core/target/debug").path
-                return [ .unsafeFlags(["-L\(libPath)", "-lclip_core_bindings"]) ]
+                return [
+                    .unsafeFlags(["-L\(libPath)"]),
+                    .linkedLibrary("clip_core_bindings", .dynamic)
+                ]
             }()
         )
     ]
