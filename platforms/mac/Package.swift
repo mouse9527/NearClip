@@ -11,7 +11,10 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "App",
-            path: "Sources/App"
+            path: "Sources/App",
+            linkerSettings: [
+                .unsafeFlags(["-L../../core/bindings/target/debug", "-lclip_core_bindings"])
+            ]
         )
     ]
 )
