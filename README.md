@@ -47,6 +47,12 @@ You can also install [`just`](https://github.com/casey/just) and run:
 just build-all
 ```
 
+### GitHub Actions artifacts
+
+Every workflow run uploads the build outputs as artifacts. Visit the run summary
+on GitHub Actions to download `android-apk` (the debug APK) and `macos-binary`
+(the compiled macOS executable).
+
 ### Pairing GUI
 
 An experimental desktop GUI for initiating device pairing is located in
