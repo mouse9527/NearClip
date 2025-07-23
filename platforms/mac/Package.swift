@@ -1,5 +1,6 @@
 // swift-tools-version:5.10
 import PackageDescription
+import Foundation
 
 let package = Package(
     name: "ClipboardMac",
@@ -12,9 +13,11 @@ let package = Package(
         .executableTarget(
             name: "App",
             path: "Sources/App",
-            linkerSettings: [
-                .unsafeFlags(["-L../../core/bindings/target/debug", "-lclip_core_bindings"])
-            ]
+            linkerSettings: {
+                let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+                let libPath = root.appendingPathComponent("../../core/bindings/target/debug").path
+                return [ .unsafeFlags(["-L\(libPath)", "-lclip_core_bindings"]) ]
+            }()
         )
     ]
 )

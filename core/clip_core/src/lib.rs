@@ -2,6 +2,7 @@
 
 pub mod pairing;
 pub mod sync;
+#[cfg(feature = "ble")]
 pub mod ble;
 
 /// Example function verifying the library was linked correctly.

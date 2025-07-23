@@ -1,4 +1,6 @@
-use clip_core::{hello, pairing::PairingClient, sync::SyncClient, ble::BleClient};
+use clip_core::{hello, pairing::PairingClient, sync::SyncClient};
+#[cfg(feature = "ble")]
+use clip_core::ble::BleClient;
 use std::ffi::{c_char, CStr};
 
 fn runtime() -> tokio::runtime::Runtime {
@@ -40,6 +42,7 @@ pub extern "C" fn clip_core_sync_send(addr: *const c_char, msg: *const c_char) -
 }
 
 /// Performs BLE pairing with a nearby device. Returns 0 on success.
+#[cfg(feature = "ble")]
 #[no_mangle]
 pub extern "C" fn clip_core_ble_pair() -> i32 {
     let rt = runtime();
@@ -50,7 +53,14 @@ pub extern "C" fn clip_core_ble_pair() -> i32 {
     }
 }
 
+#[cfg(not(feature = "ble"))]
+#[no_mangle]
+pub extern "C" fn clip_core_ble_pair() -> i32 {
+    -1
+}
+
 /// Sends a message via BLE to a paired device. Returns 0 on success.
+#[cfg(feature = "ble")]
 #[no_mangle]
 pub extern "C" fn clip_core_ble_send(msg: *const c_char) -> i32 {
     let msg = unsafe { CStr::from_ptr(msg) };
@@ -61,4 +71,10 @@ pub extern "C" fn clip_core_ble_send(msg: *const c_char) -> i32 {
         Ok(_) => 0,
         Err(_) => -1,
     }
+}
+
+#[cfg(not(feature = "ble"))]
+#[no_mangle]
+pub extern "C" fn clip_core_ble_send(_msg: *const c_char) -> i32 {
+    -1
 }
