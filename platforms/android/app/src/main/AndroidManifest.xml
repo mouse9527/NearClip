@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mouse.clipboard">
+    package="com.mouse.nearclip">
 
     <!-- BLE 所需权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -24,7 +24,7 @@
         android:label="Clipboard"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:supportsRtl="true">
-        <activity android:name="com.mouse.clipboard.MainActivity" android:exported="true">
+        <activity android:name="com.mouse.nearclip.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
