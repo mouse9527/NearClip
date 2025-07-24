@@ -19,7 +19,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.mouse.clipboard.R
+import com.mouse.nearclip.R
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
@@ -61,9 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1001 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             // 所有权限都授予后再开始扫描
@@ -95,17 +93,8 @@ class MainActivity : AppCompatActivity() {
     private fun startBleScan() {
 
         val context = this
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 权限未授予，直接返回或申请权限
-            return
-        }
         val scanner = bluetoothAdapter.bluetoothLeScanner
         val scanCallback = object : ScanCallback() {
-            @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 val device = result.device
                 if (device.name?.contains(targetDeviceName, ignoreCase = true) == true) {

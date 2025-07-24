@@ -10,11 +10,11 @@ repositories {
 }
 
 android {
-    namespace = "com.mouse.clipboard"
+    namespace = "com.mouse.nearclip"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mouse.clipboard"
+        applicationId = "com.mouse.nearclip"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
