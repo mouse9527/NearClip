@@ -16,10 +16,10 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.mouse.nearclip.R
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val serviceUUID = UUID.fromString("0000180F-0000-1000-8000-00805f9b34fb") // 电池服务
     private val characteristicUUID = UUID.fromString("00002A19-0000-1000-8000-00805f9b34fb") // 电池电量
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,10 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.sendButton).setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -155,30 +153,16 @@ class MainActivity : AppCompatActivity() {
                 Log.e(TAG, "未找到特征")
             }
         }
-
-        override fun onCharacteristicChanged(
-            gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic
-        ) {
-            val received = characteristic.value.toString(Charsets.UTF_8)
-            runOnUiThread {
-                Toast.makeText(this@MainActivity, "收到数据：$received", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private fun sendText(text: String) {
-        val gatt = bluetoothGatt ?: return
-        val service = gatt.getService(serviceUUID)
-        val characteristic = service?.getCharacteristic(characteristicUUID)
-
-        if (characteristic != null) {
-            characteristic.value = text.toByteArray(Charsets.UTF_8)
-            val result = gatt.writeCharacteristic(characteristic)
-            Log.d(TAG, "发送文本 [$text] 结果：$result")
-        } else {
-            Log.e(TAG, "未找到可写特征")
-        }
+        bluetoothGatt?.writeCharacteristic(
+            bluetoothGatt?.getService(serviceUUID)?.getCharacteristic(characteristicUUID)!!,
+            text.toByteArray(Charsets.UTF_8),
+            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        )
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
