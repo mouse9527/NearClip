@@ -10,11 +10,11 @@ repositories {
 }
 
 android {
-    namespace = "com.mouse.clipsync"
+    namespace = "com.mouse.clipboard"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mouse.clipsync"
+        applicationId = "com.mouse.clipboard"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

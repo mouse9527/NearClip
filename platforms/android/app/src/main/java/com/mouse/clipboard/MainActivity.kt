@@ -11,9 +11,10 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.mouse.clipboard.R
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     // 替换成你的设备信息
     private val targetDeviceName = "BLE_Device" // ← 你的 BLE 外设名称
-    private val serviceUUID = UUID.fromString("0000xxxx-0000-1000-8000-00805f9b34fb")
-    private val characteristicUUID = UUID.fromString("0000yyyy-0000-1000-8000-00805f9b34fb")
+    private val serviceUUID = UUID.fromString("0000180F-0000-1000-8000-00805f9b34fb") // 电池服务
+    private val characteristicUUID = UUID.fromString("00002A19-0000-1000-8000-00805f9b34fb") // 电池电量
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +36,36 @@ class MainActivity : AppCompatActivity() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         requestPermissionsIfNeeded()
 
+
         findViewById<Button>(R.id.sendButton).setOnClickListener {
-            val text = findViewById<EditText>(R.id.inputText).text.toString()
-            sendText(text)
+            if (ActivityCompat.checkSelfPermission(
+                    this, Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return@setOnClickListener
+            }
+            sendText(findViewById<EditText>(R.id.inputText).text.toString())
         }
 
-        startBleScan()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            // 所有权限都授予后再开始扫描
+            startBleScan()
+        } else {
+            Toast.makeText(this, "需要权限才能使用蓝牙功能", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun requestPermissionsIfNeeded() {
@@ -63,12 +88,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBleScan() {
+
+        val context = this
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // 权限未授予，直接返回或申请权限
+            return
+        }
         val scanner = bluetoothAdapter.bluetoothLeScanner
         val scanCallback = object : ScanCallback() {
+            @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 val device = result.device
                 if (device.name?.contains(targetDeviceName, ignoreCase = true) == true) {
                     Log.d(TAG, "找到目标设备：${device.name}")
+                    if (ActivityCompat.checkSelfPermission(
+                            context, Manifest.permission.BLUETOOTH_SCAN
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // 权限未授予，直接返回或申请权限
+                        return
+                    }
                     scanner.stopScan(this)
                     connectToDevice(device)
                 }
@@ -83,8 +126,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun connectToDevice(device: BluetoothDevice) {
         bluetoothGatt = if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_CONNECT
+                this, Manifest.permission.BLUETOOTH_CONNECT
             ) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         ) {
             return
@@ -95,6 +137,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val gattCallback = object : BluetoothGattCallback() {
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d(TAG, "连接成功，开始发现服务")
@@ -105,6 +148,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             Log.d(TAG, "服务发现完成")
             val service = gatt.getService(serviceUUID)
@@ -119,8 +163,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onCharacteristicChanged(
-            gatt: BluetoothGatt,
-            characteristic: BluetoothGattCharacteristic
+            gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic
         ) {
             val received = characteristic.value.toString(Charsets.UTF_8)
             runOnUiThread {
@@ -129,6 +172,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private fun sendText(text: String) {
         val gatt = bluetoothGatt ?: return
         val service = gatt.getService(serviceUUID)
@@ -143,6 +187,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onDestroy() {
         super.onDestroy()
         bluetoothGatt?.close()
