@@ -22,7 +22,7 @@
 
     <application
         android:allowBackup="true"
-        android:label="Clipboard"
+        android:label="Nearclip"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:supportsRtl="true">
         <activity android:name="com.mouse.nearclip.MainActivity" android:exported="true">
